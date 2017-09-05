@@ -7,12 +7,12 @@ class Chart(object):
         self._width = width
         self._height = height
         self.__matrix = np.ndarray((width, height), dtype='S1')
-        self.__matrix[:] = ''
+        self.__matrix[:] = 'x'
 
     def _update(self):
         rand_x = randint(0, self._width - 1)
         rand_y = randint(0, self._height - 1)
-        self.__matrix[rand_x, rand_y] = randint(0, 100)
+        self.__matrix[rand_x, rand_y] = '-'
 
     @property
     def matrix(self):
