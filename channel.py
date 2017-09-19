@@ -42,15 +42,12 @@ class Channel(object):
 class HorizontalChannel(Channel):
     def __init__(self, tag, height, value, delimeter="█"):
         super(HorizontalChannel, self).__init__(tag, height, value, delimeter)
-        self.__generate_output()
+        self.__generate_str()
 
-    def __generate_output(self):
-        self._output += "%s| " % self._tag
-        for x in range(0, self._height):
-            if x < self._value:
-                self._output += self._delimeter
-            else:
-                self._output += " "
+    def __generate_str(self):
+        self._output = "%s" % self._delimeter*self._value
+        self._output += "%s" % self._delimeter*(self._height-self._value)
+        self._output += " [%s]" % self._value
 
     def __str__(self):
         return self._output

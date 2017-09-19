@@ -1,4 +1,5 @@
 import click
+import re
 from reprint import output
 from channel import HorizontalChannel
 from chart import Chart
@@ -8,7 +9,15 @@ __author__ = "Stephen Fox"
 
 
 def generate_chart(data, heading):
-    channels = [HorizontalChannel("", int(x), int(x)) for x in data.split(" ")]
+    # todo: better way to do this...
+    tags = re.findall(r"([a-z]+|[A-Z])", data)
+    values = re.findall(r"[0-9]+", data)
+    channels = []
+    if len(tags) != 0:
+        # todo: assumes all values will have corresponding tags
+        channels = [HorizontalChannel(tag, int(val), int(val)) for tag, val in zip(tags, values)]
+    else:
+        channels = [HorizontalChannel("", int(x), int(x)) for x in data.split(" ")]
     return Chart(channels, heading)
 
 
