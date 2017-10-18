@@ -9,19 +9,12 @@ __author__ = "Stephen Fox"
 
 
 def generate_chart(data, heading):
-    matches = re.finditer(r"(.+[^0-9])([0-9]+)", data)
+    channels = []
+    matches = re.finditer(r"(?:\s)?(?P<key>[\D]+)(?:\s|:)+(?=[0-9]+)(?P<value>[0-9]+)", data)
     for match in matches:
-        tags = match.start()
-        value = match.end()
-        print("start:%s end:%s" % (tags, value))
-        return
-    tags = re.findall(r"([a-zA-Z]+)", data)
-    values = re.findall(r"[0-9]+", data)
-    if len(tags) != 0:
-        # todo: assumes all values will have corresponding tags
-        channels = [HorizontalChannel(tag, int(val), int(val)) for tag, val in zip(tags, values)]
-    else:
-        channels = [HorizontalChannel("", int(x), int(x)) for x in data.split(" ")]
+        key = match.group("key")
+        value = match.group("value")
+        channels.append(HorizontalChannel(key, int(value), int(value)))
     return Chart(channels, heading)
 
 
@@ -33,7 +26,7 @@ def static_output(chart):
 @click.command()
 @click.option("-d", "--data",
               type=str,
-              help="Comma separated values. e.g. -d 1, 2, 3, 10")
+              help="Key value pair: spaced e.g.")
 @click.option("-h", "--heading",
               type=str,
               help="Heading for the outputted data.")
