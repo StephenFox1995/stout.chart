@@ -20,7 +20,7 @@ def generate_chart(data, **kwargs):
 
 def static_output(chart):
     for line in chart:
-        click.secho(line, fg=chart.color)
+        click.secho(line, bg=chart.bg_color, fg=chart.fg_color)
 
 
 @click.command()
@@ -30,10 +30,12 @@ def static_output(chart):
 @click.option("-h", "--heading",
               type=str,
               help="Heading for the outputted data.")
-@click.option("-c", "--color",
+@click.option("-fg", "--fgcolor",
               type=click.Choice(['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']))
-def main(data, heading, color):
-    static_output(generate_chart(data, heading=heading, color=color))
+@click.option("-bg", "--bgcolor",
+              type=click.Choice(['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']))
+def main(data, heading, fgcolor, bgcolor):
+    static_output(generate_chart(data, heading=heading, fg_color=fgcolor, bg_color=bgcolor))
 
 
 if __name__ == "__main__":

@@ -1,14 +1,23 @@
 class Chart(object):
+
+    # Param keys.
+    FG_COLOR = "fg_color"
+    BG_COLOR = "bg_color"
+    HEADING = "heading"
+
     def __init__(self, channels, **kwargs):
-        self._color = "red"
+        self._fg_color = "red"
+        self._bg_color = "reset"
         self._heading = "stout.chart"
         self._lines = []  # All lines that will be printed.
         self._channels = channels
 
-        if "color" in kwargs and kwargs.get("color") is not None:
-            self._color = kwargs.get("color")
-        if "heading" in kwargs and kwargs.get("heading") is not None:
-            self._heading = kwargs.get("heading")
+        if self.FG_COLOR in kwargs and kwargs.get(self.FG_COLOR) is not None:
+            self._fg_color = kwargs.get(self.FG_COLOR)
+        if self.BG_COLOR in kwargs and kwargs.get(self.BG_COLOR) is not None:
+            self._bg_color = kwargs.get(self.BG_COLOR)
+        if self.HEADING in kwargs and kwargs.get(self.HEADING) is not None:
+            self._heading = kwargs.get(self.HEADING)
 
         self._heading = "| %s |" % self._heading
         self._lines.append(self._heading)
@@ -33,5 +42,10 @@ class Chart(object):
         return iter(self._lines)
 
     @property
-    def color(self):
-        return self._color
+    def fg_color(self):
+        return self._fg_color
+
+    @property
+    def bg_color(self):
+        return self._bg_color
+
