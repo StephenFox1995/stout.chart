@@ -1,29 +1,45 @@
-class Chart(object):
-    def __init__(self, channels, heading=""):
-        self._lines = []  # All lines that will be printed.
-        self._channels = channels
-        self._heading = "| %s |" % heading
-        self._lines.append(heading)
+import re
 
-        max_tag_indent = self._find_max_tag_indent_needed()
-        for channel in self._channels:
-            indent_more_by = (len(channel.tag) - max_tag_indent) * -1
-            line = "%s%s |%s" % (channel.tag,
-                                 " "*indent_more_by,
-                                 str(channel))
-            self._lines.append(line)
+import click
 
-    # Find the max indentation needed for all channel tags.
-    def _find_max_tag_indent_needed(self):
-        max_indent = 0
-        for channel in self._channels:
-            if len(channel.tag) > max_indent:
-                max_indent = len(channel.tag)
-        return max_indent
+from chart.channel import HorizontalChannel
+from chart.chart import Chart
 
-    def __iter__(self):
-        return iter(self._lines)
+__author__ = "Stephen Fox"
 
 
+def generate_chart(data, heading):
+    matches = re.finditer(r"(.+[^0-9])([0-9]+)", data)
+    for match in matches:
+        tags = match.start()
+        value = match.end()
+        print("start:%s end:%s" % (tags, value))
+        return
+    tags = re.findall(r"([a-zA-Z]+)", data)
+    values = re.findall(r"[0-9]+", data)
+    if len(tags) != 0:
+        # todo: assumes all values will have corresponding tags
+        channels = [HorizontalChannel(tag, int(val), int(val)) for tag, val in zip(tags, values)]
+    else:
+        channels = [HorizontalChannel("", int(x), int(x)) for x in data.split(" ")]
+    return Chart(channels, heading)
 
 
+def static_output(chart):
+    for line in chart:
+        click.secho(line, fg="red")
+
+
+@click.command()
+@click.option("-d", "--data",
+              type=str,
+              help="Comma separated values. e.g. -d 1, 2, 3, 10")
+@click.option("-h", "--heading",
+              type=str,
+              help="Heading for the outputted data.")
+def main(data, heading):
+    static_output(generate_chart(data, heading))
+
+
+if __name__ == "__main__":
+    main()

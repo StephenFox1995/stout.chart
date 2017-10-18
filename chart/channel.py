@@ -51,3 +51,4 @@ class HorizontalChannel(Channel):
 
     def __str__(self):
         return self._output
+
