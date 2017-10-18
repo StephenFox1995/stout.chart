@@ -8,19 +8,19 @@ from chart.chart import Chart
 __author__ = "Stephen Fox"
 
 
-def generate_chart(data, heading):
+def generate_chart(data, **kwargs):
     channels = []
     matches = re.finditer(r"(?:\s)?(?P<key>[\D]+)(?:\s|:)+(?=[0-9]+)(?P<value>[0-9]+)", data)
     for match in matches:
         key = match.group("key")
         value = match.group("value")
         channels.append(HorizontalChannel(key, int(value), int(value)))
-    return Chart(channels, heading)
+    return Chart(channels, **kwargs)
 
 
 def static_output(chart):
     for line in chart:
-        click.secho(line, fg="red")
+        click.secho(line, fg=chart.color)
 
 
 @click.command()
@@ -30,8 +30,10 @@ def static_output(chart):
 @click.option("-h", "--heading",
               type=str,
               help="Heading for the outputted data.")
-def main(data, heading):
-    static_output(generate_chart(data, heading))
+@click.option("-c", "--color",
+              type=click.Choice(['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']))
+def main(data, heading, color):
+    static_output(generate_chart(data, heading=heading, color=color))
 
 
 if __name__ == "__main__":

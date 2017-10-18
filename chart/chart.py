@@ -1,9 +1,17 @@
 class Chart(object):
-    def __init__(self, channels, heading=""):
+    def __init__(self, channels, **kwargs):
+        self._color = "red"
+        self._heading = "stout.chart"
         self._lines = []  # All lines that will be printed.
         self._channels = channels
-        self._heading = "| %s |" % heading
-        self._lines.append(heading)
+
+        if "color" in kwargs and kwargs.get("color") is not None:
+            self._color = kwargs.get("color")
+        if "heading" in kwargs and kwargs.get("heading") is not None:
+            self._heading = kwargs.get("heading")
+
+        self._heading = "| %s |" % self._heading
+        self._lines.append(self._heading)
 
         max_tag_indent = self._find_max_tag_indent_needed()
         for channel in self._channels:
@@ -23,3 +31,7 @@ class Chart(object):
 
     def __iter__(self):
         return iter(self._lines)
+
+    @property
+    def color(self):
+        return self._color
