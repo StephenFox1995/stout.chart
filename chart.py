@@ -26,7 +26,7 @@ def static_output(chart):
 @click.command()
 @click.option("-d", "--data",
               type=str,
-              help="Key value pair: spaced e.g.")
+              help="Key value pair: spaced e.g. ireland 50 united kingdom 43")
 @click.option("-h", "--heading",
               type=str,
               help="Heading for the outputted data.")
