@@ -1,13 +1,13 @@
 class Chart(object):
     def __init__(self, channels, **kwargs):
-        self._color = "blue"
+        self._color = "red"
         self._heading = "stout.chart"
         self._lines = []  # All lines that will be printed.
         self._channels = channels
 
-        if "color" in kwargs:
+        if "color" in kwargs and kwargs.get("color") is not None:
             self._color = kwargs.get("color")
-        if "heading" in kwargs:
+        if "heading" in kwargs and kwargs.get("heading") is not None:
             self._heading = kwargs.get("heading")
 
         self._heading = "| %s |" % self._heading
